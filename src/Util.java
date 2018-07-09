@@ -87,17 +87,19 @@ public class Util {
 		}
 		return true;
 	}
-
-	final static void drawAnswer(Graphics g, int x, int y, int size, int width, String[][] bombMap) { // draw answer
+	
+	//return true means the game is over
+	final static boolean drawAnswer(Graphics g, int x, int y, int size, int width, String[][] bombMap) { // draw answer
 		if (checkPixelBound(x, y, size) && bombMap[y][x] == null) {
 			g.setColor(new Color(0,0,255,100)); //畫RGBA
 			g.fillRect(x * width + 3, y * width + 3, width-3, width-3);
+			return false;
 		} else if (checkPixelBound(x, y, size) && bombMap[y][x].equals("*")) {
 			drawAllAns(g, size, width, bombMap);
 			JOptionPane.showMessageDialog(null, "Nice try", "QQ", JOptionPane.ERROR_MESSAGE);
-		} else {
-
-		}
+			return true;
+		} 
+		return false;
 	}
 
 	final static void drawAllAns(Graphics g, int size, int width, String[][] map) { //錯了顯示所有答案
@@ -114,7 +116,8 @@ public class Util {
 		}
 	}
 	
-	final static void checkGame(String[][] map, String[][] clickMap, int size) { //看遊戲結束了沒
+	//return true means game is over
+	final static boolean checkGame(String[][] map, String[][] clickMap, int size) { //看遊戲結束了沒
 		boolean flag = true;
 		for (int i = 0; i < size; i++) { 
 			for (int j = 0; j < size; j++) {
@@ -126,6 +129,25 @@ public class Util {
 		}
 		if(flag == true) {
 			JOptionPane.showMessageDialog(null, "Congratulation!!!", "~YA~", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		}
+		return false;
+	}
+	
+	final static int givingSize() { //input the size of the map
+		int size;
+		while(true) {
+			try {
+			size = Integer.parseInt(JOptionPane.showInputDialog("Size: [Suggest 2 ≤ size ≤ 7]"));
+			if (size >= 2 && size <= 7) {
+				break;
+			} else {
+				JOptionPane.showMessageDialog(null, "2 ≤ input ≤ 7 plz", "HINT", JOptionPane.ERROR_MESSAGE);
+			}
+			}catch(NumberFormatException nfe) {
+				continue;
+			}
+		}
+		return size;
 	}
 }

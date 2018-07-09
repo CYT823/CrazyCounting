@@ -85,7 +85,7 @@ public class CrazyCountingFrame extends JFrame {
 		bag5.fill = GridBagConstraints.BOTH;
 		bag5.anchor = GridBagConstraints.WEST;
 
-		size = Integer.parseInt(JOptionPane.showInputDialog("Size: [Suggest 2 ≤ x ≤ 7]"));
+		size = Util.givingSize();
 		bombMap = new String[size][size];
 		clickMap = new String[size][size];
 		
@@ -166,14 +166,20 @@ public class CrazyCountingFrame extends JFrame {
 					int mouseX = (mouseEvent.getX()) / width;
 					int mouseY = (mouseEvent.getY()) / width;
 
-					Graphics g = drawPanel.getGraphics();
-					Util.drawAnswer(g, mouseX, mouseY, size, width, bombMap);
+					if (clickMap[mouseY][mouseX] != null) {
+						Graphics g = drawPanel.getGraphics();
+						if(Util.drawAnswer(g, mouseX, mouseY, size, width, bombMap) == true) {
+							gameState = false;
+						}
+					}
 
 					if (mouseX < size && mouseY < size) { // 當滑鼠點選超過框框 則不放進陣列
 						clickMap[mouseY][mouseX] = null;
 					}
 
-					Util.checkGame(bombMap, clickMap, size);
+					if(Util.checkGame(bombMap, clickMap, size)) {
+						gameState = false;
+					}
 				}
 			}
 		});
@@ -189,7 +195,7 @@ public class CrazyCountingFrame extends JFrame {
 				leftPanel.removeAll();
 				topPanel.removeAll();
 
-				size = Integer.parseInt(JOptionPane.showInputDialog("Size: [Suggest 2 ≤ x ≤ 7]"));
+				size = Util.givingSize();
 				bombMap = new String[size][size];
 				clickMap = new String[size][size];
 				bombMap = Util.bombSetting(size);
