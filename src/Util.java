@@ -35,13 +35,13 @@ public class Util {
 		return map;
 	}
 
-	final static String[] search(String[][] bombMap) { // 找安全位置間隔
-		String[] result = new String[10]; 
-		for (int i = 0; i < 5; i++) { // 左邊顯示
+	final static String[] search(String[][] bombMap, int size) { // 找安全位置間隔
+		String[] result = new String[size*2]; 
+		for (int i = 0; i < size; i++) { // 左邊顯示
 			int count = 0;
 			String num = "";
 			boolean flag = true;
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < size; j++) {
 				if (bombMap[i][j] != "*") {
 					count++;
 					flag = true;
@@ -57,11 +57,11 @@ public class Util {
 				num += (count + " ");
 			result[i] = num;
 		}
-		for (int i = 0; i < 5; i++) { // 上排顯示
+		for (int i = 0; i <size; i++) { // 上排顯示
 			int count = 0;
 			String num = "";
 			boolean flag = true;
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < size; j++) {
 				if (bombMap[j][i] != "*") {
 					count++;
 					flag = true;
@@ -75,7 +75,7 @@ public class Util {
 			}
 			if(flag == true)
 				num += (count + " ");
-			result[i + 5] = num;
+			result[i + size] = num;
 		}
 
 		return result;

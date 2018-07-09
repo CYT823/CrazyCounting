@@ -85,18 +85,18 @@ public class CrazyCountingFrame extends JFrame {
 		bag5.fill = GridBagConstraints.BOTH;
 		bag5.anchor = GridBagConstraints.WEST;
 
-		size = 5;
+		size = Integer.parseInt(JOptionPane.showInputDialog("Size: [Suggest 2 ≤ x ≤ 7]"));
 		bombMap = new String[size][size];
 		clickMap = new String[size][size];
 		
 		bombMap = Util.bombSetting(size);
 		
-		result = new String[10]; //炸彈提示(左側 上面)
-		result = Util.search(bombMap);
+		result = new String[size*2]; //炸彈提示(左側 上面)
+		result = Util.search(bombMap, size);
 		
-		leftPanel = new JPanel(new GridLayout(size, 1)); //左邊顯示欄位
-		for (int i = 0; i < 5; i++) {
-			JPanel tempPan = new JPanel(new GridLayout(1, result[i].split(" ").length));
+		leftPanel = new JPanel(new GridLayout(size, 1)); //左邊顯示欄位先分隔
+		for (int i = 0; i < size; i++) {
+			JPanel tempPan = new JPanel(new GridLayout(1, result[i].split(" ").length)); //每一格在平均分放數字
 			for (int j = 0; j < result[i].split(" ").length; j++) {
 				JLabel tempLb = new JLabel(result[i].split(" ")[j]);
 				tempLb.setFont(new Font("", Font.BOLD, 20));
@@ -107,8 +107,8 @@ public class CrazyCountingFrame extends JFrame {
 		}
 		
 		topPanel = new JPanel(new GridLayout(1, size)); //上排顯示欄位
-		for (int i = 5; i < 10; i++) {
-			JPanel tempPan = new JPanel(new GridLayout(result[i].split(" ").length, 1));
+		for (int i = size; i < size*2; i++) {
+			JPanel tempPan = new JPanel(new GridLayout(result[i].split(" ").length, 1)); //每一格在平均分放數字
 			for (int j = 0; j < result[i].split(" ").length; j++) {
 				JLabel tempLb = new JLabel(result[i].split(" ")[j]);
 				tempLb.setFont(new Font("", Font.BOLD, 20));
@@ -186,17 +186,18 @@ public class CrazyCountingFrame extends JFrame {
 				gameState = false;
 
 				drawPanel.repaint();
+				leftPanel.removeAll();
+				topPanel.removeAll();
 
+				size = Integer.parseInt(JOptionPane.showInputDialog("Size: [Suggest 2 ≤ x ≤ 7]"));
 				bombMap = new String[size][size];
 				clickMap = new String[size][size];
 				bombMap = Util.bombSetting(size);
 				result = new String[10]; //炸彈提示(左側 上面)
-				result = Util.search(bombMap);
+				result = Util.search(bombMap, size);
 				
-				leftPanel.removeAll();
-				topPanel.removeAll();
-				
-				for (int i = 0; i < 5; i++) {
+				leftPanel.setLayout(new GridLayout(size, 1)); //= new JPanel(new GridLayout(size, 1)); //左邊顯示欄位
+				for (int i = 0; i < size; i++) {
 					JPanel tempPan = new JPanel(new GridLayout(1, result[i].split(" ").length));
 					for (int j = 0; j < result[i].split(" ").length; j++) {
 						JLabel tempLb = new JLabel(result[i].split(" ")[j]);
@@ -205,10 +206,11 @@ public class CrazyCountingFrame extends JFrame {
 						tempPan.add(tempLb);
 					}
 					leftPanel.add(tempPan);
-					leftPanel.revalidate();
 				}
+				leftPanel.revalidate();
 				
-				for (int i = 5; i < 10; i++) {
+				topPanel.setLayout(new GridLayout(1, size));// = new JPanel(new GridLayout(1, size)); //上面顯示欄位
+				for (int i = size; i < size*2; i++) {
 					JPanel tempPan = new JPanel(new GridLayout(result[i].split(" ").length, 1));
 					for (int j = 0; j < result[i].split(" ").length; j++) {
 						JLabel tempLb = new JLabel(result[i].split(" ")[j]);
@@ -218,6 +220,7 @@ public class CrazyCountingFrame extends JFrame {
 					}
 					topPanel.add(tempPan);
 				}
+				topPanel.revalidate();
 			}
 		});
 		
